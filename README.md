@@ -1,2 +1,26 @@
-# process-manager
-Gerenciador de processos de sistemas Linux em Python
+**Usuário:**
+- nada
+  
+
+- **CPU:**
+- nada
+  
+
+- **ID:**
+- nada
+  
+
+- **Memoria:**
+- nada
+  
+
+- **Leitura do disco:**
+- nada
+  
+
+- **Escrita do disco:**
+- nada
+  
+
+- **Prioridade:**
+- nada
