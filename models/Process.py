@@ -24,7 +24,7 @@ class Process:
         """
         self.user, self.user_id = self.get_user_process()
         self.cpu_usage = self.get_process_cpu_usage()
-        self.memory_usage = ''
+        self.memory_usage = self.get_memory_process()
         self.disk_read = ''
         self.disk_write = ''
         self.priority = ''
@@ -32,12 +32,11 @@ class Process:
     def get_user_process(self):
         """
         Retorna o nome do usuário vinculado ao processo
-        :return:
         """
-        target_uid = ''
+        target_uid = None
         with open(f'/proc/{self.pid}/status') as status_file:
             for line in status_file.readlines():
-                if 'Uid:' in line:
+                if line.startswith('Uid:'):
                     target_uid = line.split('\t')[3]
 
         username = pwd.getpwuid(format_int(target_uid)).pw_name
@@ -64,3 +63,15 @@ class Process:
         before_point = str(cpu_percent).split('.')[0]
         after_point = str(cpu_percent).split('.')[1]
         return f'{before_point}.{after_point[:4]}'
+
+    def get_memory_process(self):
+        """
+        Retorna a memória que o processo está usando(em KB)
+        """
+        use_memory = None
+        with open(f"/proc/{self.pid}/status", 'r') as status_file:
+            for line in status_file.readlines():
+                if line.startswith("VmRSS"):
+                    use_memory = line.split()[1]
+
+        return use_memory

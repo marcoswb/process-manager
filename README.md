@@ -1,26 +1,4 @@
-**Usuário:**
-- nada
-  
+# Gerenciador de Processo Linux
 
-- **CPU:**
-- nada
-  
 
-- **ID:**
-- nada
-  
-
-- **Memoria:**
-- nada
-  
-
-- **Leitura do disco:**
-- nada
-  
-
-- **Escrita do disco:**
-- nada
-  
-
-- **Prioridade:**
-- nada
+Gerenciador de processo Linux mapeando informações do /proc.
