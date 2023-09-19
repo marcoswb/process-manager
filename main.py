@@ -1,7 +1,9 @@
+from os import system
 from models.Process import Process
 
 all_processes = ['1983']
 
+system('clear')
 for pid in all_processes:
     proc = Process(pid)
     print(f'PID: {proc.pid}')
