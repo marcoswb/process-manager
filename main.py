@@ -6,7 +6,9 @@ all_processes = ['1983']
 system('clear')
 for pid in all_processes:
     proc = Process(pid)
+    print(f'NAME: {proc.name}')
     print(f'PID: {proc.pid}')
+    print(f'NAME: {proc.status}')
     print(f'USER: {proc.user}')
     print(f'USER ID: {proc.user_id}')
     print(f'CPU USE: {proc.cpu_usage}%')

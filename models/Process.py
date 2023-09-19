@@ -8,6 +8,8 @@ class Process:
 
     def __init__(self, pid):
         self.pid = pid
+        self.name = None
+        self.status = None
         self.user = None
         self.user_id = None
         self.cpu_usage = None
@@ -22,6 +24,7 @@ class Process:
         """
         Carregar informações do processo
         """
+        self.name, self.status = self.get_name_status_process()
         self.user, self.user_id = self.get_user_process()
         self.cpu_usage = self.get_process_cpu_usage()
         self.memory_usage = self.get_memory_process()
@@ -40,6 +43,21 @@ class Process:
 
         username = pwd.getpwuid(format_int(target_uid)).pw_name
         return username, target_uid
+
+    def get_name_status_process(self):
+        """
+        Retorna o nome e status do processo
+        """
+        name = None
+        status = None
+        with open(f'/proc/{self.pid}/status') as status_file:
+            for line in status_file.readlines():
+                if line.startswith('Name:'):
+                    name = line.split(':')[1].replace('\n', '').strip()
+                if line.startswith('State:'):
+                    status = line.split(':')[1].replace('\n', '').strip()
+
+        return name, status
 
     def get_process_cpu_usage(self):
         """
