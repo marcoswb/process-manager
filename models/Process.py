@@ -25,8 +25,7 @@ class Process:
         self.user, self.user_id = self.get_user_process()
         self.cpu_usage = self.get_process_cpu_usage()
         self.memory_usage = self.get_memory_process()
-        self.disk_read = ''
-        self.disk_write = ''
+        self.disk_read, self.disk_write = self.get_disk_use()
         self.priority = ''
 
     def get_user_process(self):
@@ -75,3 +74,29 @@ class Process:
                     use_memory = line.split()[1]
 
         return use_memory
+
+    def get_disk_use(self):
+        """
+        Retorna quantos KB o processo está usando para escrita e leitura em disco
+        """
+        with open(f'/proc/{self.pid}/io', 'r') as io_file:
+            io_data = io_file.readlines()
+
+        bytes_read = ''
+        bytes_written = ''
+        for line in io_data:
+            if line.startswith('read_bytes'):
+                bytes_read = int(line.split(':')[1])
+
+            if line.startswith('write_bytes'):
+                bytes_written = int(line.split(':')[1])
+
+        kilobytes_read = 0
+        kilobytes_written = 0
+        if bytes_read > 0:
+            kilobytes_read = bytes_read / 1024
+
+        if bytes_written > 0:
+            kilobytes_written = bytes_written / 1024
+
+        return kilobytes_read, kilobytes_written
