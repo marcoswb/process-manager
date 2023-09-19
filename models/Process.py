@@ -26,7 +26,7 @@ class Process:
         self.cpu_usage = self.get_process_cpu_usage()
         self.memory_usage = self.get_memory_process()
         self.disk_read, self.disk_write = self.get_disk_use()
-        self.priority = ''
+        self.priority = self.get_process_priority()
 
     def get_user_process(self):
         """
@@ -100,3 +100,24 @@ class Process:
             kilobytes_written = bytes_written / 1024
 
         return kilobytes_read, kilobytes_written
+
+    def get_process_priority(self):
+        """
+        Retorna a prioridade um processo
+        """
+        with open(f'/proc/{self.pid}/stat', 'r') as stat_file:
+            stat_data = stat_file.read()
+
+        # A prioridade (nice value) está na posição 18
+        stat_parts = stat_data.split()
+        priority_level = int(stat_parts[18])
+
+        # concatena ao nível de prioridade o seu status(baixa, padrão ou alta)
+        if priority_level < -1:
+            priority = f'{priority_level} (low)'
+        elif priority_level == 0:
+            priority = f'{priority_level} (default)'
+        else:
+            priority = f'{priority_level} (high)'
+
+        return priority
