@@ -8,15 +8,15 @@ class Process:
 
     def __init__(self, pid):
         self.pid = pid
-        self.name = None
-        self.status = None
-        self.user = None
-        self.user_id = None
-        self.cpu_usage = None
-        self.memory_usage = None
-        self.disk_read = None
-        self.disk_write = None
-        self.priority = None
+        self.name = ''
+        self.status = ''
+        self.user = ''
+        self.user_id = ''
+        self.cpu_usage = 0
+        self.memory_usage = 0
+        self.disk_read = 0
+        self.disk_write = 0
+        self.priority = ''
 
         self.load_information_process()
 
@@ -35,7 +35,7 @@ class Process:
         """
         Retorna o nome do usuário vinculado ao processo
         """
-        target_uid = None
+        target_uid = ''
         with open(f'/proc/{self.pid}/status') as status_file:
             for line in status_file.readlines():
                 if line.startswith('Uid:'):
@@ -48,8 +48,8 @@ class Process:
         """
         Retorna o nome e status do processo
         """
-        name = None
-        status = None
+        name = ''
+        status = ''
         with open(f'/proc/{self.pid}/status') as status_file:
             for line in status_file.readlines():
                 if line.startswith('Name:'):
@@ -85,7 +85,7 @@ class Process:
         """
         Retorna a memória que o processo está usando(em KB)
         """
-        use_memory = None
+        use_memory = 0
         with open(f"/proc/{self.pid}/status", 'r') as status_file:
             for line in status_file.readlines():
                 if line.startswith("VmRSS"):
