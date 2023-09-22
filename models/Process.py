@@ -66,20 +66,22 @@ class Process:
         with open(f'/proc/{self.pid}/stat', 'r') as stat_file:
             stat_info = stat_file.read().split()
 
+        with open('/proc/uptime', 'r') as read_file:
+            uptime_seconds = float(read_file.readline().split()[0])
+
         utime = float(stat_info[13])
         stime = float(stat_info[14])
-        cutime = float(stat_info[15])
-        cstime = float(stat_info[16])
-
-        total_jiffies = utime + stime + cutime + cstime
+        start_time = float(stat_info[21])
         number_of_clock_ticks_per_second = os.sysconf(os.sysconf_names['SC_CLK_TCK'])
 
-        uptime = time.time() - (float(stat_info[21]) / number_of_clock_ticks_per_second)
-        cpu_percent = ((total_jiffies / number_of_clock_ticks_per_second) / uptime) * 100.0
+        utime_seconds = utime / number_of_clock_ticks_per_second
+        stime_seconds = stime / number_of_clock_ticks_per_second
+        start_time_seconds = start_time / number_of_clock_ticks_per_second
 
-        before_point = str(cpu_percent).split('.')[0]
-        after_point = str(cpu_percent).split('.')[1]
-        return f'{before_point}.{after_point[:4]}'
+        process_elapsed_time = uptime_seconds - start_time_seconds
+        process_usage_seconds = utime_seconds - stime_seconds
+        process_usage = process_usage_seconds * 100 / process_elapsed_time
+        return process_usage
 
     def get_memory_process(self):
         """
