@@ -25,7 +25,16 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
         <property name="showGrid">
+         <bool>true</bool>
+        </property>
+        <property name="sortingEnabled">
          <bool>true</bool>
         </property>
         <attribute name="horizontalHeaderDefaultSectionSize">
@@ -53,17 +62,17 @@
         </column>
         <column>
          <property name="text">
-          <string>MEMORY USAGE</string>
+          <string>MEMORY USAGE (KB)</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>DISK READ</string>
+          <string>DISK READ (KB)</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>DISK WRITE</string>
+          <string>DISK WRITE (KB)</string>
          </property>
         </column>
        </widget>

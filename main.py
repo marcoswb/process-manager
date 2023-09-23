@@ -64,6 +64,9 @@ class ProcessManager(QMainWindow):
         """
         Renderizar janela
         """
+        self.load_data_process()
+        self.fill_data()
+
         self.__window.showMaximized()
 
     def load_data_process(self):
@@ -83,14 +86,20 @@ class ProcessManager(QMainWindow):
 
             self.__status_process[proc.status] += 1
 
-    def show(self):
+    def fill_data(self):
         """
-        Mostra os dados em tela
+        Preenche os dados em memrória em tela
         """
-        self.load_data_process()
+        for index, proc in enumerate(self.__data_process):
+            self.__table_list_process.insertRow(index)
 
-        self.show_infos_process()
-        self.show_data()
+            self.__table_list_process.setItem(index, 0, QTableWidgetItem(str(proc.pid)))
+            self.__table_list_process.setItem(index, 1, QTableWidgetItem(str(proc.user)))
+            self.__table_list_process.setItem(index, 2, QTableWidgetItem(str(proc.name)))
+            self.__table_list_process.setItem(index, 3, QTableWidgetItem(str(proc.priority)))
+            self.__table_list_process.setItem(index, 4, QTableWidgetItem(str(proc.memory_usage)))
+            self.__table_list_process.setItem(index, 5, QTableWidgetItem(str(proc.disk_read)))
+            self.__table_list_process.setItem(index, 6, QTableWidgetItem(str(proc.disk_write)))
 
     def show_infos_process(self):
         """
@@ -110,20 +119,6 @@ class ProcessManager(QMainWindow):
 
         print(f'Total de CPU utilizado: {format(total_cpu_usage, ".2f")}%')
         print(f'Total de memória utilizada: {format(percent_memory_usage, ".2f")}%')
-
-    def show_data(self):
-        """
-        Grava em tela os dados dos processos
-        """
-        for proc in self.__data_process:
-            print(proc.pid)
-            print(proc.user)
-            print(proc.name)
-            print(proc.priority)
-            print(f'{proc.memory_usage} KB')
-            print(f'{proc.disk_read} KB')
-            print(f'{proc.disk_write} KB')
-            print('')
 
     def stop_process(self):
         """
