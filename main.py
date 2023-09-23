@@ -1,3 +1,7 @@
+from sys import exit
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMessageBox, QHeaderView
+from PySide6.QtCore import QFile
 from os import system, listdir
 from os.path import isdir
 
@@ -5,9 +9,11 @@ from models.Process import Process
 from utils.functions import *
 
 
-class ProcessManager:
+class ProcessManager(QMainWindow):
 
     def __init__(self):
+        super().__init__()
+
         self.__data_process = []
         self.__length_columns = {}
         self.__total_memory_usage = 0
@@ -22,12 +28,43 @@ class ProcessManager:
             'DISK WRITE'
         ]
 
-    def load_columns(self):
+        self.__window = self.setup_ui('./screen_ui/screen.ui')
+        self.link_components()
+
+    @staticmethod
+    def setup_ui(ui_file_name):
         """
-        Carrega os tamanhos dos textos do cabeçalho
+        Inicializar interface
         """
-        for column in self.__columns_header:
-            self.save_length_column(column, column)
+        ui_file = QFile(ui_file_name)
+        loader = QUiLoader()
+        return loader.load(ui_file)
+
+    def link_components(self):
+        """
+        Vincular componentes da interface
+        """
+        self.__table_list_process = self.__window.table__list_process
+
+        # redimensionar tamanho do cabeçalho conforme tamanho da tela
+        header = self.__table_list_process.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.Stretch)
+
+        self.__button_stop = self.__window.button__stop
+        self.__button_resume = self.__window.button__resume
+        self.__button_restart = self.__window.button__restart
+        self.__button_kill = self.__window.button__kill
+        #
+        self.__button_stop.clicked.connect(self.stop_process)
+        self.__button_resume.clicked.connect(self.resume_process)
+        self.__button_restart.clicked.connect(self.restart_process)
+        self.__button_kill.clicked.connect(self.kill_process)
+
+    def init(self):
+        """
+        Renderizar janela
+        """
+        self.__window.showMaximized()
 
     def load_data_process(self):
         """
@@ -40,47 +77,19 @@ class ProcessManager:
             proc = Process(directory)
             self.__data_process.append(proc)
 
-            self.save_length_column(proc.pid, 'PID')
-            self.save_length_column(proc.user, 'USER')
-            self.save_length_column(proc.name, 'NAME')
-            self.save_length_column(proc.priority, 'PRIORITY')
-            self.save_length_column(proc.cpu_usage, 'TOTAL CPU USAGE')
-            self.save_length_column(proc.memory_usage, 'MEMORY USAGE')
-            self.save_length_column(proc.disk_read, 'DISK READ')
-            self.save_length_column(proc.disk_write, 'DISK WRITE')
-
             self.__total_memory_usage += float(proc.memory_usage)
             if not self.__status_process.get(proc.status):
                 self.__status_process[proc.status] = 0
 
             self.__status_process[proc.status] += 1
 
-    def save_length_column(self, value, column):
-        """
-        Salva o tamanho máximo que cada coluna tem que ter
-        """
-        if self.__length_columns.get(column):
-            if self.__length_columns.get(column) < len(str(value)):
-                self.__length_columns[column] = len(str(value))
-        else:
-            self.__length_columns[column] = len(str(value))
-
-    def get_number_free_spaces(self, column, value):
-        """
-        Retorna o numero de espaços em branco que precisa ser deixado
-        """
-        length = self.__length_columns.get(column)
-        return length - len(str(value)) + 5
-
     def show(self):
         """
         Mostra os dados em tela
         """
-        self.load_columns()
         self.load_data_process()
 
         self.show_infos_process()
-        self.show_header()
         self.show_data()
 
     def show_infos_process(self):
@@ -102,31 +111,50 @@ class ProcessManager:
         print(f'Total de CPU utilizado: {format(total_cpu_usage, ".2f")}%')
         print(f'Total de memória utilizada: {format(percent_memory_usage, ".2f")}%')
 
-    def show_header(self):
-        """
-        Grava em tela o cabeçalho do gerenciador
-        """
-        for column in self.__columns_header:
-            print(column, ' '*self.get_number_free_spaces(column, column), end='')
-
-        print('')
-
     def show_data(self):
         """
         Grava em tela os dados dos processos
         """
         for proc in self.__data_process:
-            print(proc.pid, ' ' * self.get_number_free_spaces('PID', proc.pid), end='')
-            print(proc.user, ' ' * self.get_number_free_spaces('USER', proc.user), end='')
-            print(proc.name, ' ' * self.get_number_free_spaces('NAME', proc.name), end='')
-            print(proc.priority, ' ' * self.get_number_free_spaces('PRIORITY', proc.priority), end='')
-            print(f'{proc.memory_usage} KB', ' ' * self.get_number_free_spaces('MEMORY USAGE', f'{proc.memory_usage} KB'), end='')
-            print(f'{proc.disk_read} KB', ' ' * self.get_number_free_spaces('DISK READ', f'{proc.disk_read} KB'), end='')
-            print(f'{proc.disk_write} KB', ' ' * self.get_number_free_spaces('DISK WRITE', f'{proc.disk_write} KB'), end='')
+            print(proc.pid)
+            print(proc.user)
+            print(proc.name)
+            print(proc.priority)
+            print(f'{proc.memory_usage} KB')
+            print(f'{proc.disk_read} KB')
+            print(f'{proc.disk_write} KB')
             print('')
+
+    def stop_process(self):
+        """
+        Parar execução de um processo
+        """
+        pass
+
+    def resume_process(self):
+        """
+        Resumir execução de um processo
+        """
+        pass
+
+    def restart_process(self):
+        """
+        Reiniciar um processo
+        """
+        pass
+
+    def kill_process(self):
+        """
+        Finalizar execução de um processo
+        """
+        pass
 
 
 if __name__ == '__main__':
-    system('clear')
-    app = ProcessManager()
-    app.show()
+    app = QApplication([])
+
+    window = ProcessManager()
+    window.init()
+
+    exit(app.exec())
+

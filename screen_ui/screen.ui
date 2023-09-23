@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>955</width>
+    <height>594</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Gerenciador de Processos Python</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_7">
+      <item>
+       <widget class="QTableWidget" name="table__list_process">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="showGrid">
+         <bool>true</bool>
+        </property>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>131</number>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>PID</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>USER</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>NAME</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>PRIORITY</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>MEMORY USAGE</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>DISK READ</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>DISK WRITE</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button__stop">
+        <property name="text">
+         <string>STOP</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button__resume">
+        <property name="text">
+         <string>RESUME</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button__restart">
+        <property name="text">
+         <string>RESTART</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button__kill">
+        <property name="text">
+         <string>KILL</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
