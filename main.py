@@ -99,11 +99,6 @@ class ProcessManager:
             else:
                 print(f'{status}: {self.__status_process.get(status)}, ', end='')
 
-        # print(f'{self.__status_process.get("R (running)")} rodando, ', end='')
-        # print(f'{self.__status_process.get("S (sleeping)")} dormindo, ', end='')
-        # print(f'{self.__status_process.get("T (Stopped)", 0)} parados, ', end='')
-        # print(f'{self.__status_process.get("Z (Zombie)", 0)} zombies')
-
         print(f'Total de CPU utilizado: {format(total_cpu_usage, ".2f")}%')
         print(f'Total de memória utilizada: {format(percent_memory_usage, ".2f")}%')
 
