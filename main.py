@@ -50,6 +50,12 @@ class ProcessManager(QMainWindow):
         header = self.__table_list_process.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Stretch)
 
+        self.__label_time = self.__window.label__time
+        self.__label_uptime = self.__window.label__uptime
+        self.__label_cpu_usage = self.__window.label__cpu_usage
+        self.__label_memory_usage = self.__window.label__memory_usage
+        self.__label_infos_process = self.__window.label__infos_process
+
         self.__button_stop = self.__window.button__stop
         self.__button_resume = self.__window.button__resume
         self.__button_restart = self.__window.button__restart
@@ -66,6 +72,7 @@ class ProcessManager(QMainWindow):
         """
         self.load_data_process()
         self.fill_data()
+        self.show_infos_process()
 
         self.__window.showMaximized()
 
@@ -100,6 +107,7 @@ class ProcessManager(QMainWindow):
             self.__table_list_process.setItem(index, 4, QTableWidgetItem(str(proc.memory_usage)))
             self.__table_list_process.setItem(index, 5, QTableWidgetItem(str(proc.disk_read)))
             self.__table_list_process.setItem(index, 6, QTableWidgetItem(str(proc.disk_write)))
+            self.__table_list_process.setItem(index, 7, QTableWidgetItem(str(proc.status)))
 
     def show_infos_process(self):
         """
@@ -107,18 +115,21 @@ class ProcessManager(QMainWindow):
         """
         percent_memory_usage = (self.__total_memory_usage * 100) / total_memory_machine()
         total_cpu_usage = get_cpu_percent()
-        print(f'Horário atual: {get_current_time()}, máquina ativa a {get_uptime_machine()}h')
-        print(f'Número total de processos: {len(self.__data_process)}, ', end='')
 
-        total_status = len(self.__status_process) -1
+        self.__label_time.setText(f'<b>Current time:</b> {get_current_time()}')
+        self.__label_uptime.setText(f'<b>Uptime machine:</b> {get_uptime_machine()}h')
+        self.__label_cpu_usage.setText(f'<b>Total CPU used:</b> {format(total_cpu_usage, ".2f")}%')
+        self.__label_memory_usage.setText(f'<b>Total memory used:</b> {format(percent_memory_usage, ".2f")}%')
+
+        text_info_process = f'<b>Total number of processes:</b> {len(self.__data_process)};     '
+        total_status = len(self.__status_process) - 1
         for index, status in enumerate(self.__status_process):
             if index == total_status:
-                print(f'{status}: {self.__status_process.get(status)}')
+                text_info_process += f'{self.__status_process.get(status)} are {status}'
             else:
-                print(f'{status}: {self.__status_process.get(status)}, ', end='')
+                text_info_process += f'{self.__status_process.get(status)} are {status},   '
 
-        print(f'Total de CPU utilizado: {format(total_cpu_usage, ".2f")}%')
-        print(f'Total de memória utilizada: {format(percent_memory_usage, ".2f")}%')
+        self.__label_infos_process.setText(text_info_process)
 
     def stop_process(self):
         """
