@@ -1,4 +1,5 @@
 import time
+import psutil
 
 
 def format_int(value):
@@ -26,3 +27,7 @@ def total_memory_machine():
         for line in read_file.readlines():
             if line.startswith('MemTotal'):
                 return float(line.split(':')[1].replace('kB', '').strip())
+
+
+def get_cpu_percent():
+    return psutil.cpu_percent()
