@@ -1,9 +1,11 @@
 from sys import exit
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMessageBox, QHeaderView
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
 from PySide6.QtCore import QFile
-from os import system, listdir
+from os import listdir
 from os.path import isdir
+from threading import Thread
+from time import sleep
 
 from models.Process import Process
 from utils.functions import *
@@ -30,6 +32,8 @@ class ProcessManager(QMainWindow):
 
         self.__window = self.setup_ui('./screen_ui/screen.ui')
         self.link_components()
+        self.update_thread = Thread(target=self.update_infos_screen)
+        self.update_thread.daemon = True
 
     @staticmethod
     def setup_ui(ui_file_name):
@@ -74,6 +78,7 @@ class ProcessManager(QMainWindow):
         self.fill_data()
         self.show_infos_process()
 
+        self.update_thread.start()
         self.__window.showMaximized()
 
     def load_data_process(self):
@@ -114,11 +119,10 @@ class ProcessManager(QMainWindow):
         Mostra em tela alguns dados gerais dos processos
         """
         percent_memory_usage = (self.__total_memory_usage * 100) / total_memory_machine()
-        total_cpu_usage = get_cpu_percent()
 
         self.__label_time.setText(f'<b>Current time:</b> {get_current_time()}')
         self.__label_uptime.setText(f'<b>Uptime machine:</b> {get_uptime_machine()}h')
-        self.__label_cpu_usage.setText(f'<b>Total CPU used:</b> {format(total_cpu_usage, ".2f")}%')
+        self.__label_cpu_usage.setText(f'<b>Total CPU used:</b> {format(get_cpu_percent(), ".2f")}%')
         self.__label_memory_usage.setText(f'<b>Total memory used:</b> {format(percent_memory_usage, ".2f")}%')
 
         text_info_process = f'<b>Total number of processes:</b> {len(self.__data_process)};     '
@@ -130,6 +134,36 @@ class ProcessManager(QMainWindow):
                 text_info_process += f'{self.__status_process.get(status)} are {status},   '
 
         self.__label_infos_process.setText(text_info_process)
+
+    def update_infos_screen(self):
+        """
+        Fica em loop atualizando as informações em tela
+        """
+        count = 0
+        while True:
+            sleep(1)
+            self.__label_time.setText(f'<b>Current time:</b> {get_current_time()}')
+
+            if count % 5 == 0:
+                count = 0
+
+                percent_memory_usage = (self.__total_memory_usage * 100) / total_memory_machine()
+                self.__label_time.setText(f'<b>Current time:</b> {get_current_time()}')
+                self.__label_uptime.setText(f'<b>Uptime machine:</b> {get_uptime_machine()}h')
+                self.__label_cpu_usage.setText(f'<b>Total CPU used:</b> {format(get_cpu_percent(), ".2f")}%')
+                self.__label_memory_usage.setText(f'<b>Total memory used:</b> {format(percent_memory_usage, ".2f")}%')
+
+                text_info_process = f'<b>Total number of processes:</b> {len(self.__data_process)};     '
+                total_status = len(self.__status_process) - 1
+                for index, status in enumerate(self.__status_process):
+                    if index == total_status:
+                        text_info_process += f'{self.__status_process.get(status)} are {status}'
+                    else:
+                        text_info_process += f'{self.__status_process.get(status)} are {status},   '
+
+                self.__label_infos_process.setText(text_info_process)
+
+            count += 1
 
     def stop_process(self):
         """
