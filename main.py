@@ -85,6 +85,10 @@ class ProcessManager(QMainWindow):
         """
         Carrega os dados dos processos em memória
         """
+        self.__data_process.clear()
+        self.__status_process = {}
+        self.__length_columns = {}
+        self.__total_memory_usage = 0
         for directory in listdir('/proc'):
             if not isdir(f'/proc/{directory}') or not format_int(directory):
                 continue
@@ -100,8 +104,11 @@ class ProcessManager(QMainWindow):
 
     def fill_data(self):
         """
-        Preenche os dados em memrória em tela
+        Preenche os dados em memória em tela
         """
+        while self.__table_list_process.rowCount() > 0:
+            self.__table_list_process.removeRow(0)
+
         for index, proc in enumerate(self.__data_process):
             self.__table_list_process.insertRow(index)
 
@@ -146,22 +153,9 @@ class ProcessManager(QMainWindow):
 
             if count % 5 == 0:
                 count = 0
-
-                percent_memory_usage = (self.__total_memory_usage * 100) / total_memory_machine()
-                self.__label_time.setText(f'<b>Current time:</b> {get_current_time()}')
-                self.__label_uptime.setText(f'<b>Uptime machine:</b> {get_uptime_machine()}h')
-                self.__label_cpu_usage.setText(f'<b>Total CPU used:</b> {format(get_cpu_percent(), ".2f")}%')
-                self.__label_memory_usage.setText(f'<b>Total memory used:</b> {format(percent_memory_usage, ".2f")}%')
-
-                text_info_process = f'<b>Total number of processes:</b> {len(self.__data_process)};     '
-                total_status = len(self.__status_process) - 1
-                for index, status in enumerate(self.__status_process):
-                    if index == total_status:
-                        text_info_process += f'{self.__status_process.get(status)} are {status}'
-                    else:
-                        text_info_process += f'{self.__status_process.get(status)} are {status},   '
-
-                self.__label_infos_process.setText(text_info_process)
+                self.show_infos_process()
+                self.load_data_process()
+                self.fill_data()
 
             count += 1
 
@@ -197,4 +191,3 @@ if __name__ == '__main__':
     window.init()
 
     exit(app.exec())
-
