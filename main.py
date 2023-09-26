@@ -1,13 +1,14 @@
 from sys import exit
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
-from PySide6.QtCore import QFile
+from PySide6.QtCore import QFile, Slot
 from os import listdir
 from os.path import isdir
 from threading import Thread
 from time import sleep
 
 from models.Process import Process
+from classes.UpdateInfos import UpdateDataProcess, UpdateGeneralInfos
 from utils.functions import *
 
 
@@ -32,8 +33,14 @@ class ProcessManager(QMainWindow):
 
         self.__window = self.setup_ui('./screen_ui/screen.ui')
         self.link_components()
-        self.update_thread = Thread(target=self.update_infos_screen)
-        self.update_thread.daemon = True
+
+        # atualizar informações gerais
+        self.update_data_thread = UpdateGeneralInfos(self)
+        self.update_data_thread.data_changed.connect(self.update_infos_process)
+        self.update_data_thread.start()
+
+        # self.update_thread = Thread(target=self.update_infos_screen)
+        # self.update_thread.daemon = True
 
     @staticmethod
     def setup_ui(ui_file_name):
@@ -78,7 +85,7 @@ class ProcessManager(QMainWindow):
         self.fill_data()
         self.show_infos_process()
 
-        self.update_thread.start()
+        # self.update_thread.start()
         self.__window.showMaximized()
 
     def load_data_process(self):
@@ -153,11 +160,26 @@ class ProcessManager(QMainWindow):
 
             if count % 5 == 0:
                 count = 0
-                self.show_infos_process()
                 self.load_data_process()
                 self.fill_data()
+                self.show_infos_process()
 
             count += 1
+
+    @Slot(list, float, dict)
+    def onDataChanged(self, data_process, total_memory_usage, status_process):
+        print('chegou os dados')
+        # it = self.tableWidget.item(row, column)
+        # if it is None:
+        #     it = QtWidgets.QTableWidgetItem()
+        #     self.tableWidget.setItem(row, column, it)
+        # it.setText(text)
+
+    @Slot(str, str, str)
+    def update_infos_process(self, current_time, uptime_machine, cpu_percent):
+        self.__label_time.setText(f'<b>Current time:</b> {current_time}')
+        self.__label_uptime.setText(f'<b>Uptime machine:</b> {uptime_machine}h')
+        self.__label_cpu_usage.setText(f'<b>Total CPU used:</b> {cpu_percent}%')
 
     def stop_process(self):
         """
