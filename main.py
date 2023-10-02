@@ -85,7 +85,6 @@ class ProcessManager(QMainWindow):
         self.fill_data()
         self.show_infos_process()
 
-        # self.update_thread.start()
         self.__window.showMaximized()
 
     def load_data_process(self):
@@ -148,34 +147,46 @@ class ProcessManager(QMainWindow):
 
         self.__label_infos_process.setText(text_info_process)
 
-    def update_infos_screen(self):
-        """
-        Fica em loop atualizando as informações em tela
-        """
-        count = 0
-        while True:
-            sleep(1)
-            if count % 5 == 0:
-                count = 0
-                self.load_data_process()
-                self.fill_data()
-                self.show_infos_process()
-
-            count += 1
-
     @Slot(dict, str, str)
     def update_data_process(self, data_process, percent_memory_usage, text_info_process):
-        for pid in data_process:
-            row = 0
-            for column, value in enumerate(data_process.get(pid)):
-                item = self.__table_list_process.item(row, column)
-                if item is None:
-                    # remover item da lista que não existe mais
-                    # item = QTableWidgetItem()
-                    # self.__table_list_process.setItem(row, column, item)
-                    continue
+        """
+        Atualiza os dados dos processos na lista
+        """
+        location_processes_in_the_list = {}
+        for row in range(self.__table_list_process.rowCount()):
+            item = self.__table_list_process.item(row, 0)
+            if item is not None:
+                location_processes_in_the_list[item.text()] = row
 
-                item.setText(value)
+        active_process = []
+        for pid in data_process:
+            row = location_processes_in_the_list.get(str(pid))
+            if row is not None:
+                for column, value in enumerate(data_process.get(pid)):
+                    item = self.__table_list_process.item(row, column)
+                    if item is None:
+                        print(pid, column, value)
+                    item.setText(value)
+                    active_process.append(str(pid))
+            else:
+                # inserir item que ainda não existe na lista
+                new_index = self.__table_list_process.rowCount()
+                self.__table_list_process.insertRow(new_index)
+
+                self.__table_list_process.setItem(new_index, 0, QTableWidgetItem(str(data_process.get(pid)[0])))
+                self.__table_list_process.setItem(new_index, 1, QTableWidgetItem(str(data_process.get(pid)[1])))
+                self.__table_list_process.setItem(new_index, 2, QTableWidgetItem(str(data_process.get(pid)[2])))
+                self.__table_list_process.setItem(new_index, 3, QTableWidgetItem(str(data_process.get(pid)[3])))
+                self.__table_list_process.setItem(new_index, 4, QTableWidgetItem(str(data_process.get(pid)[4])))
+                self.__table_list_process.setItem(new_index, 5, QTableWidgetItem(str(data_process.get(pid)[5])))
+                self.__table_list_process.setItem(new_index, 6, QTableWidgetItem(str(data_process.get(pid)[6])))
+                self.__table_list_process.setItem(new_index, 7, QTableWidgetItem(str(data_process.get(pid)[7])))
+
+                active_process.append(str(pid))
+
+        for pid, row in location_processes_in_the_list.items():
+            if pid not in active_process:
+                self.__table_list_process.removeRow(row)
 
         self.__label_memory_usage.setText(f'<b>Total memory used:</b> {percent_memory_usage}%')
         self.__label_infos_process.setText(text_info_process)
