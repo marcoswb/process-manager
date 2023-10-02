@@ -8,13 +8,13 @@ from utils.functions import *
 
 
 class UpdateDataProcess(QThread):
-    data_changed = Signal(list, str, str)
+    data_changed = Signal(dict, str, str)
 
     def run(self):
         while True:
             sleep(5)
 
-            data_process = []
+            data_process = {}
             total_memory_usage = 0
             status_process = {}
             for directory in listdir('/proc'):
@@ -22,7 +22,16 @@ class UpdateDataProcess(QThread):
                     continue
 
                 proc = Process(directory)
-                data_process.append(proc)
+                data_process[proc.pid] = [
+                    str(proc.pid),
+                    str(proc.user),
+                    str(proc.name),
+                    str(proc.priority),
+                    str(proc.memory_usage),
+                    str(proc.disk_read),
+                    str(proc.disk_write),
+                    str(proc.status)
+                ]
 
                 total_memory_usage += float(proc.memory_usage)
                 if not status_process.get(proc.status):

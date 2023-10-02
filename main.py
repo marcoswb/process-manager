@@ -163,31 +163,22 @@ class ProcessManager(QMainWindow):
 
             count += 1
 
-    @Slot(list, str, str)
+    @Slot(dict, str, str)
     def update_data_process(self, data_process, percent_memory_usage, text_info_process):
-        # while self.__table_list_process.rowCount() > 0:
-        #     self.__table_list_process.removeRow(0)
-        #
-        # for index, proc in enumerate(self.__data_process):
-        #     self.__table_list_process.insertRow(index)
-        #
-        #     self.__table_list_process.setItem(index, 0, QTableWidgetItem(str(proc.pid)))
-        #     self.__table_list_process.setItem(index, 1, QTableWidgetItem(str(proc.user)))
-        #     self.__table_list_process.setItem(index, 2, QTableWidgetItem(str(proc.name)))
-        #     self.__table_list_process.setItem(index, 3, QTableWidgetItem(str(proc.priority)))
-        #     self.__table_list_process.setItem(index, 4, QTableWidgetItem(str(proc.memory_usage)))
-        #     self.__table_list_process.setItem(index, 5, QTableWidgetItem(str(proc.disk_read)))
-        #     self.__table_list_process.setItem(index, 6, QTableWidgetItem(str(proc.disk_write)))
-        #     self.__table_list_process.setItem(index, 7, QTableWidgetItem(str(proc.status)))
+        for pid in data_process:
+            row = 0
+            for column, value in enumerate(data_process.get(pid)):
+                item = self.__table_list_process.item(row, column)
+                if item is None:
+                    # remover item da lista que não existe mais
+                    # item = QTableWidgetItem()
+                    # self.__table_list_process.setItem(row, column, item)
+                    continue
+
+                item.setText(value)
 
         self.__label_memory_usage.setText(f'<b>Total memory used:</b> {percent_memory_usage}%')
         self.__label_infos_process.setText(text_info_process)
-
-        # it = self.tableWidget.item(row, column)
-        # if it is None:
-        #     it = QtWidgets.QTableWidgetItem()
-        #     self.tableWidget.setItem(row, column, it)
-        # it.setText(text)
 
     @Slot(str, str, str)
     def update_infos_process(self, current_time, uptime_machine, cpu_percent):
