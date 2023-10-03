@@ -219,16 +219,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="button__restart">
+       <widget class="QPushButton" name="button__kill">
         <property name="text">
-         <string>RESTART</string>
+         <string>KILL</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="button__kill">
+       <widget class="QPushButton" name="button__force_kill">
         <property name="text">
-         <string>KILL</string>
+         <string>FORCE KILL</string>
         </property>
        </widget>
       </item>

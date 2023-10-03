@@ -69,13 +69,13 @@ class ProcessManager(QMainWindow):
 
         self.__button_stop = self.__window.button__stop
         self.__button_resume = self.__window.button__resume
-        self.__button_restart = self.__window.button__restart
         self.__button_kill = self.__window.button__kill
-        #
+        self.__button_force_kill = self.__window.button__force_kill
+
         self.__button_stop.clicked.connect(self.stop_process)
         self.__button_resume.clicked.connect(self.resume_process)
-        self.__button_restart.clicked.connect(self.restart_process)
         self.__button_kill.clicked.connect(self.kill_process)
+        self.__button_force_kill.clicked.connect(self.force_kill_process)
 
     def init(self):
         """
@@ -199,19 +199,15 @@ class ProcessManager(QMainWindow):
         """
         Parar execução de um processo
         """
-        pass
+        row, pid = self.get_selected_process()
+        send_signal_process(pid, 'TSTP')
 
     def resume_process(self):
         """
         Resumir execução de um processo
         """
-        pass
-
-    def restart_process(self):
-        """
-        Reiniciar um processo
-        """
-        pass
+        row, pid = self.get_selected_process()
+        send_signal_process(pid, 'CONT')
 
     def kill_process(self):
         """
@@ -219,6 +215,15 @@ class ProcessManager(QMainWindow):
         """
         row, pid = self.get_selected_process()
         send_signal_process(pid, '15')
+        self.__table_list_process.removeRow(row)
+        self.__table_list_process.clearSelection()
+
+    def force_kill_process(self):
+        """
+        Finalizar execução de um processo
+        """
+        row, pid = self.get_selected_process()
+        send_signal_process(pid, '9')
         self.__table_list_process.removeRow(row)
         self.__table_list_process.clearSelection()
 
