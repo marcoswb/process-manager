@@ -164,8 +164,6 @@ class ProcessManager(QMainWindow):
             if row is not None:
                 for column, value in enumerate(data_process.get(pid)):
                     item = self.__table_list_process.item(row, column)
-                    if item is None:
-                        print(pid, column, value)
                     item.setText(value)
                     active_process.append(str(pid))
             else:
