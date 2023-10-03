@@ -1,5 +1,6 @@
 import time
 import psutil
+from os import system
 
 
 def format_int(value):
@@ -31,3 +32,10 @@ def total_memory_machine():
 
 def get_cpu_percent():
     return psutil.cpu_percent()
+
+
+def send_signal_process(pid, signal):
+    """
+    Envia um sinal para um processo
+    """
+    system(f'kill -{signal} {pid}')

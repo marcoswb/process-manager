@@ -217,7 +217,20 @@ class ProcessManager(QMainWindow):
         """
         Finalizar execução de um processo
         """
-        pass
+        row, pid = self.get_selected_process()
+        send_signal_process(pid, '15')
+        self.__table_list_process.removeRow(row)
+        self.__table_list_process.clearSelection()
+
+    def get_selected_process(self):
+        """
+        Retorna o PID da linha selecionada
+        """
+        items = self.__table_list_process.selectedItems()
+        if items:
+            return items[0].row(), items[0].text()
+
+        return None, None
 
 
 if __name__ == '__main__':
