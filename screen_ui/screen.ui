@@ -13,7 +13,15 @@
   <property name="windowTitle">
    <string>Gerenciador de Processos Python</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">Qlabel: {
+	font: 11pt &quot;Cantarell&quot;;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -104,6 +112,17 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QTableWidget::item:selected {
+	background-color: lightgray;
+	color: red;
+}
+QHeaderView::section {
+	background-color: rgb(94, 92, 100);
+	color: white;
+	border: 1px solid gray;
+}</string>
+        </property>
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
         </property>
@@ -122,6 +141,8 @@
         <attribute name="horizontalHeaderDefaultSectionSize">
          <number>131</number>
         </attribute>
+        <row/>
+        <row/>
         <column>
          <property name="text">
           <string>PID</string>
@@ -202,10 +223,94 @@
           </font>
          </property>
         </column>
+        <item row="0" column="0">
+         <property name="text">
+          <string>1</string>
+         </property>
+        </item>
+        <item row="0" column="1">
+         <property name="text">
+          <string>root</string>
+         </property>
+        </item>
+        <item row="0" column="2">
+         <property name="text">
+          <string>systemd</string>
+         </property>
+        </item>
+        <item row="0" column="3">
+         <property name="text">
+          <string>-20(low)</string>
+         </property>
+        </item>
+        <item row="0" column="4">
+         <property name="text">
+          <string>4123</string>
+         </property>
+        </item>
+        <item row="0" column="5">
+         <property name="text">
+          <string>4312123.2</string>
+         </property>
+        </item>
+        <item row="0" column="6">
+         <property name="text">
+          <string>5123.2</string>
+         </property>
+        </item>
+        <item row="0" column="7">
+         <property name="text">
+          <string>I(idle)</string>
+         </property>
+        </item>
+        <item row="1" column="0">
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item row="1" column="1">
+         <property name="text">
+          <string>root</string>
+         </property>
+        </item>
+        <item row="1" column="2">
+         <property name="text">
+          <string>systemd</string>
+         </property>
+        </item>
+        <item row="1" column="3">
+         <property name="text">
+          <string>0(default)</string>
+         </property>
+        </item>
+        <item row="1" column="4">
+         <property name="text">
+          <string>30112</string>
+         </property>
+        </item>
+        <item row="1" column="5">
+         <property name="text">
+          <string>6212.5</string>
+         </property>
+        </item>
+        <item row="1" column="6">
+         <property name="text">
+          <string>52234.5</string>
+         </property>
+        </item>
+        <item row="1" column="7">
+         <property name="text">
+          <string>S(sleeping)</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="button__stop">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 190, 111);
+font: 11pt &quot;Cantarell&quot;;</string>
+        </property>
         <property name="text">
          <string>STOP</string>
         </property>
@@ -213,6 +318,10 @@
       </item>
       <item>
        <widget class="QPushButton" name="button__resume">
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;Cantarell&quot;;
+background-color: rgb(143, 240, 164);</string>
+        </property>
         <property name="text">
          <string>RESUME</string>
         </property>
@@ -220,6 +329,10 @@
       </item>
       <item>
        <widget class="QPushButton" name="button__kill">
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;Cantarell&quot;;
+background-color: rgb(246, 97, 81);</string>
+        </property>
         <property name="text">
          <string>KILL</string>
         </property>
@@ -227,6 +340,10 @@
       </item>
       <item>
        <widget class="QPushButton" name="button__force_kill">
+        <property name="styleSheet">
+         <string notr="true">font: 800 11pt &quot;Cantarell&quot;;
+background-color: rgb(224, 27, 36);</string>
+        </property>
         <property name="text">
          <string>FORCE KILL</string>
         </property>
