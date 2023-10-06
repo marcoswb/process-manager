@@ -1,10 +1,9 @@
 from sys import exit
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QHeaderView
-from PySide6.QtCore import QFile, Slot, Qt
+from PySide6.QtCore import QFile, Slot
 from os import listdir
 from os.path import isdir
-from time import sleep
 
 from models.Process import Process
 from classes.UpdateInfos import UpdateDataProcess, UpdateGeneralInfos
