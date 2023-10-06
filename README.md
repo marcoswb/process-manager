@@ -33,6 +33,7 @@ relembrar e aprender vários conceitos que são tão importantes no Linux e no d
 em geral.
 
 Abaixo segue um video demonstrativo da execução do projeto:
+![video](https://github.com/marcoswb/process-manager/assets/48187276/10c96a25-0d34-48ba-a212-1232bcf2d794)
 
 
 E caso queira executá-lo é bem simples, basta seguir os seguintes passos:
